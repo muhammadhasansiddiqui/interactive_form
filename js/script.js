@@ -39,11 +39,11 @@ designInput.addEventListener('input', e => {
         {
             if(colors[i].dataset.theme === 'js puns')
             {
-                colors[i].style.display = 'block';
+                colors[i].hidden = false;
             }
             else if(colors[i].dataset.theme === 'heart js')
             {
-                colors[i].style.display = 'none';
+                colors[i].hidden = true;
             }
         }
     }
@@ -55,11 +55,11 @@ designInput.addEventListener('input', e => {
         {
             if(colors[i].dataset.theme === 'heart js')
             {
-                colors[i].style.display = 'block';
+                colors[i].hidden = false;
             }
             else if(colors[i].dataset.theme === 'js puns')
             {
-                colors[i].style.display = 'none';
+                colors[i].hidden = true;
             }
         }
     }
