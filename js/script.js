@@ -2,6 +2,9 @@
 const nameInput = document.querySelector('#name');
 nameInput.focus();
 
+/***
+ * Job Role Selection
+***/
 const jobInput = document.querySelector('#title');
 const otherJobInput = document.querySelector('#other-job-role');
 otherJobInput.style.display = 'none';
@@ -18,6 +21,9 @@ jobInput.addEventListener('input', e => {
     }
 });
 
+/***
+ * T-Shirt Design/Color
+***/
 const designInput = document.querySelector('#design');
 const colorInput = document.querySelector('#color');
 const colorDiv = colorInput.parentNode;
@@ -63,4 +69,22 @@ designInput.addEventListener('input', e => {
             }
         }
     }
+});
+
+/*** 
+ * Activity Registration
+***/
+const activities = document.querySelector('#activities');
+const activitiesTotal = document.querySelector('#activities-cost');
+let totalCost = 0;
+
+// Update total cost of all activities based on selected input
+activities.addEventListener('input', e => {
+    activityChecked = e.target.checked;
+    const activityCost = e.target.dataset.cost;
+
+    activityChecked ? totalCost += parseInt(activityCost) : 
+                      totalCost -= parseInt(activityCost);
+
+    activitiesTotal.textContent = `Total: $${totalCost}`;
 });
