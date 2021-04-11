@@ -34,7 +34,6 @@ colorDiv.style.display = 'none';
 
 // When a theme is selected, display related color options
 designInput.addEventListener('input', e => {
-    
     colorDiv.style.display = 'block';
     
     if(e.target.value === 'js puns')
@@ -87,4 +86,36 @@ activities.addEventListener('input', e => {
                       totalCost -= parseInt(activityCost);
 
     activitiesTotal.textContent = `Total: $${totalCost}`;
+});
+
+/*** 
+ * Payment Information
+***/
+const paymentMethods = document.querySelectorAll('.payment-methods > div');
+const paymentSelect = document.querySelector('#payment');
+
+// Initialize payment method as 'Credit Card'
+paymentSelect.selectedIndex = '1';
+
+// Initialize other payment methods as hidden
+for(let i = 2; i < paymentMethods.length; i++)
+{
+    paymentMethods[i].style.display = 'none';
+}
+
+// Change payment method based on selected input
+paymentSelect.addEventListener('input', e => {
+    const method = e.target.value;
+
+    for(let i = 1; i < paymentSelect.length; i++)
+    {
+        if(method !== paymentMethods[i].id)
+        {
+            paymentMethods[i].style.display = 'none';
+        }
+        else
+        {
+            paymentMethods[i].style.display = 'block';
+        }
+    }
 });
