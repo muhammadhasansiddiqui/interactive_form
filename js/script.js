@@ -11,15 +11,8 @@ otherJobInput.style.display = 'none';
 
 // Hide/show "Other" job role input field based on selection
 jobInput.addEventListener('input', e => {
-    
-    if(e.target.value === 'other')
-    {
-        otherJobInput.style.display = 'block';
-    }
-    else
-    {
-        otherJobInput.style.display = 'none';
-    }
+    e.target.value === 'other' ? otherJobInput.style.display = 'block' : 
+                                 otherJobInput.style.display = 'none';
 });
 
 /***
@@ -110,14 +103,8 @@ paymentSelect.addEventListener('input', e => {
 
     for(let i = 1; i < paymentSelect.length; i++)
     {
-        if(method !== paymentMethods[i].id)
-        {
-            paymentMethods[i].style.display = 'none';
-        }
-        else
-        {
-            paymentMethods[i].style.display = 'block';
-        }
+        method !== paymentMethods[i].id ? paymentMethods[i].style.display = 'none' :
+                                          paymentMethods[i].style.display = 'block';
     }
 });
 
