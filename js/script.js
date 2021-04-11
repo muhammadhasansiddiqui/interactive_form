@@ -95,7 +95,7 @@ activities.addEventListener('focusout', e => {
 
 /*** 
  * Payment Information
-***/
+ ***/
 const paymentMethods = document.querySelectorAll('.payment-methods > div');
 const paymentSelect = document.querySelector('#payment');
 
@@ -111,95 +111,147 @@ for(let i = 2; i < paymentMethods.length; i++)
 // Change payment method based on selected input
 paymentSelect.addEventListener('input', e => {
     const method = e.target.value;
-
+    
     for(let i = 1; i < paymentSelect.length; i++)
     {
         method !== paymentMethods[i].id ? paymentMethods[i].style.display = 'none' :
-                                          paymentMethods[i].style.display = 'block';
+        paymentMethods[i].style.display = 'block';
     }
 });
 
 /*** 
  * Form Validation
-***/
+ ***/
 const form = document.querySelector('form');
+
+// Add listeners to input fields to perform real-time validation
+addListenersToField('name');
+addListenersToField('email');
+addListenersToField('cc-num');
+addListenersToField('zip');
+addListenersToField('cvv');
 
 // Validate all form input on submit
 form.addEventListener('submit', e => {
-
-
     // If any input is invalid, do not submit form
-    if(!validateName())
+    if(!validateField('name'))
     {
         e.preventDefault();
-        console.log('Name is not valid.')
     }
-    else if (!validateEmail())
-    {
-        e.preventDefault();
-        console.log('Email is not valid.')
-    }
-    else if (!validateBilling())
-    {
-        e.preventDefault();
-        console.log('Billing is not valid.')
-    }
-    else if(!validateActivity())
-    {
-        e.preventDefault();
-        console.log('Activity is not valid.')
-    }
-    else
-    {
-        // TODO: Submit form
-    }
-});
 
-// Validate that the name input field is not empty
-function validateName()
-{
-    const nameValue = nameInput.value;
-    const nameIsValid = /^[a-zA-Z]+ ?[a-zA-Z]*? ?[a-zA-Z]*?$/.test(nameValue);
-    return nameIsValid;
-}
+    if(!validateField('email'))
+    {
+        e.preventDefault();
+    }
 
-// Validate that the email input field has the correct format
-function validateEmail()
-{
-    const emailValue = document.querySelector('#email').value;
-    const emailIsValid = /^[^@]+@[^@.]+\.[a-z]+$/i.test(emailValue);
-    return emailIsValid;
-}
+    if(!validateActivity())
+    {
+        e.preventDefault();
+    }
 
-// Validate credit card, zip code and cvv code are digits and correct length
-function validateBilling()
-{
     if(paymentSelect.value === 'credit-card')
     {
-        const numValue = document.querySelector('#cc-num').value;
-        const numIsValid = /^\d{4}\d{4}\d{4}\d{1,4}$/.test(numValue);
+        if(!validateField('cc-num'))
+        {
+            e.preventDefault();
+        }
 
-        const zipValue = document.querySelector('#zip').value;
-        const zipIsValid = /^\d{5}$/.test(zipValue);
+        if(!validateField('zip'))
+        {
+            e.preventDefault();
+        }
 
-        const cvvValue = document.querySelector('#cvv').value;
-        const cvvIsValid = /^\d{3}$/.test(cvvValue);
-    
-        return numIsValid && zipIsValid && cvvIsValid ? true : false;
+        if(!validateField('cvv'))
+        {
+            e.preventDefault();
+        }
     }
-    else
+    // Else submit form
+});
+
+// Validate input field
+function validateField(field)
+{
+    const element = document.querySelector(`#${field}`);
+    const label = element.parentNode;
+    let hint = document.querySelector(`#${field}-hint`);
+    let fieldIsValid = '';
+
+    // Change validation regex based on input field
+    switch(field)
     {
-        // Do nothing
+        case 'name':
+            fieldIsValid = /^[a-zA-Z]+ ?[a-zA-Z]*? ?[a-zA-Z]*?$/.test(element.value);
+        break;
+        case 'email':
+            fieldIsValid = /^[^@]+@[^@.]+\.[a-z]+$/i.test(element.value);
+        break;
+        case 'cc-num':
+            fieldIsValid = /^\d{4}\d{4}\d{4}\d{1,4}$/.test(element.value);
+            hint = document.querySelector(`#cc-hint`); // Necessary because #cc-hint does not contain 'num'
+        break;
+        case 'zip':
+            fieldIsValid = /^\d{5}$/.test(element.value);
+        break;
+        case 'cvv':
+            fieldIsValid = /^\d{3}$/.test(element.value);
+        break;
     }
+
+    // If field is not valid, flag user
+    if(!fieldIsValid)
+    {
+        label.className = 'not-valid';
+        hint.style.display = 'block';
+        return false;
+    }
+
+    // If field is valid, submit
+    label.className = '';
+    hint.style.display = 'none';
+    return true;
+}
+
+// Function to add listeners to input fields to perform real-time validation
+function addListenersToField(field)
+{
+    const element = document.querySelector(`#${field}`);
+
+    // Remove input field flag on focus
+    element.addEventListener('focus', () => {
+        element.parentNode.className = '';
+        element.nextElementSibling.style.display = 'none';
+    });
+    // Flag user if the input field is invalid
+    element.addEventListener('blur', () => {
+        validateField(field);
+    });
 }
 
 // Validate that at least one activity is checked
 function validateActivity()
 {
-    const activityInputs = document.querySelectorAll('#activities-box input');
+    const activityInputs = document.querySelectorAll('#activities input');
+    let activityChecked = false;
 
+    // Loop through to check if any activities are selected
     for(let i = 0; i < activityInputs.length; i++)
     {
-        return activityInputs[i].checked ? true : false;
+        activityInputs[i].checked ? activityChecked = true : activityChecked = false;
     }
+
+    // Flag user if no activities are checked
+    if (!activityChecked)
+    {
+        activities.className += ' not-valid';
+        activities.lastElementChild.style.display = 'block';
+        return false;
+    }
+    return true;
 }
+
+// If the user checks a box after failing to submit the form, remove the flag
+activities.addEventListener('input', () => {
+    activities.className = 'activities';
+    activities.lastElementChild.style.display = 'none';
+});
