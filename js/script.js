@@ -65,7 +65,7 @@ designInput.addEventListener('input', e => {
 });
 
 /*** 
- * Activity Registration
+ * Activity Registration and Accessibility
 ***/
 const activities = document.querySelector('#activities');
 const activitiesTotal = document.querySelector('#activities-cost');
@@ -80,6 +80,17 @@ activities.addEventListener('input', e => {
                       totalCost -= parseInt(activityCost);
 
     activitiesTotal.textContent = `Total: $${totalCost}`;
+});
+
+
+// Accessibility for keyboard navigation
+activities.addEventListener('focusin', e => {
+    const label = e.target.parentNode;
+    label.className = 'focus';
+});
+activities.addEventListener('focusout', e => {
+    const label = e.target.parentNode;
+    label.className = '';
 });
 
 /*** 
