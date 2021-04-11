@@ -237,11 +237,24 @@ function validateActivity()
     // Loop through to check if any activities are selected
     for(let i = 0; i < activityInputs.length; i++)
     {
+        const activityTime = activityInputs[i].nextElementSibling.nextElementSibling.textContent;
+        const timeslot = activityTime.replace(/\D/g, '');
         activityInputs[i].checked ? activityChecked = true : activityChecked = false;
         if(activityChecked)
         {
             break;
         }
+    }
+    
+    // TODO
+    // Loop through to prevent users from selecting an activity with the same timeslot
+    for(let i = 1; i < activityInputs.length; i++)
+    {
+        const activityDate = activityInputs[i].nextElementSibling.nextElementSibling.textContent;
+        const currentTimeSlot = activityDate.replace(/\D/g, '');
+        
+        const label = activityInputs[i].parentNode;
+        label.className = 'disabled';
     }
 
     // Flag user if no activities are checked
