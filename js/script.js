@@ -238,6 +238,10 @@ function validateActivity()
     for(let i = 0; i < activityInputs.length; i++)
     {
         activityInputs[i].checked ? activityChecked = true : activityChecked = false;
+        if(activityChecked)
+        {
+            break;
+        }
     }
 
     // Flag user if no activities are checked
