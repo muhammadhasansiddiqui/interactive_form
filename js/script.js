@@ -207,7 +207,7 @@ function validateField(field)
     }
 
     // If field is valid, submit
-    label.className = '';
+    label.className = 'valid';
     hint.style.display = 'none';
     return true;
 }
@@ -247,15 +247,26 @@ function validateActivity()
     // Flag user if no activities are checked
     if (!activityChecked)
     {
-        activities.className += ' not-valid';
+        activities.className = 'activities not-valid';
         activities.lastElementChild.style.display = 'block';
         return false;
     }
+    activities.className = 'activities valid';
+    activities.lastElementChild.style.display = 'none';
     return true;
 }
 
-// If the user checks a box after failing to submit the form, remove the flag
+// Add listeners to Activity Registration fields to perform real-time validation
+activities.addEventListener('focusin', () => {
+    if(!validateActivity())
+    {
+        activities.className = 'activities';
+        activities.lastElementChild.style.display = 'none';
+    }
+});
+activities.addEventListener('focusout', () => {
+    validateActivity();
+});
 activities.addEventListener('input', () => {
-    activities.className = 'activities';
-    activities.lastElementChild.style.display = 'none';
+    validateActivity();
 });
